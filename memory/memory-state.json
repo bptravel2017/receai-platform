@@ -1,0 +1,18 @@
+{
+  "currentTask": "Fix the /api/customers Supabase permission error by enforcing a real service-role admin client in backend routes and repairing the createCustomer flow without touching the frontend UI.",
+  "lastUpdated": "2026-03-22",
+  "status": "completed_pending_live_env_verification",
+  "notes": [
+    "User requested backend-only Supabase repair work with UI left unchanged.",
+    "Patched env validation to support SUPABASE_URL fallback, reject placeholder values, and reject accidental NEXT_PUBLIC service-role exposure.",
+    "API failures now return actionable 503 messages for Supabase config/connection issues instead of collapsing everything to a generic 500.",
+    "Added repository fixes for database-side revenue filtering and idempotent invoice creation/backlink repair on unique-key races.",
+    "Added scripts/check-supabase.mjs and npm script supabase:check to validate envs, test connectivity, insert a temporary customer, and clean it up.",
+    "Verification result: npm run lint and npx tsc --noEmit pass; live Supabase check is blocked because no local Supabase env vars are set in this workspace.",
+    "Current pass is focused on the concrete runtime error 'permission denied for schema public' during POST /api/customers.",
+    "Code inspection shows repository writes already use getSupabaseAdminClient(), so the main suspected break is invalid service-role configuration or insufficient admin-client hardening rather than a frontend call path.",
+    "Patched src/lib/supabase.ts to reject JWT keys whose role claim is not service_role and to build the server client with explicit public schema plus Authorization/apikey headers from SUPABASE_SERVICE_ROLE_KEY.",
+    "Patched /api/customers POST to run validateConnection before insert and upgraded customer-facing Supabase permission-denied errors to a clearer admin-access/config failure.",
+    "Verification for the permission-error fix: npm run lint and npx tsc --noEmit pass on 2026-03-22."
+  ]
+}
