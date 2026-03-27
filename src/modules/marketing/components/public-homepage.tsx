@@ -22,12 +22,10 @@ export function PublicHomepage() {
                 Start Creating Receipts
               </Link>
               <Link
-                href="https://ledger.receai.com"
-                className="px-8 py-3 border border-orange-600 text-base font-medium rounded-md text-orange-600 bg-white hover:bg-orange-50 md:py-4 md:text-lg md:px-10"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/pricing"
+                className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 md:py-4 md:text-lg md:px-10"
               >
-                Open TourLedger
+                View Pricing
               </Link>
             </div>
             <div className="mt-8 flex justify-center gap-8 text-sm text-gray-600">
@@ -76,12 +74,12 @@ export function PublicHomepage() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <span className="text-orange-600 text-xl">📊</span>
+                  <span className="text-orange-600 text-xl">💰</span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">TourLedger ERP</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Earnings Tracking</h3>
               </div>
               <p className="text-gray-600">
-                Complete accounting solution for transportation businesses. Invoicing, expenses, and financial reporting.
+                See your daily, weekly, and monthly earnings. Know exactly how much you&apos;re making.
               </p>
             </div>
 
