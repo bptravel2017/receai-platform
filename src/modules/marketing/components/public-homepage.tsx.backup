@@ -1,0 +1,212 @@
+import Link from "next/link";
+
+import { PricingCheckoutButton } from "@/modules/billing/components/pricing-checkout-button";
+import { MARKETING_PLANS } from "@/modules/marketing/plans";
+
+const dashboardMetrics = [
+  { label: "Revenue", value: "$18,420", change: "+12.4%" },
+  { label: "Costs", value: "$6,180", change: "-3.1%" },
+  { label: "Profit", value: "$12,240", change: "+18.8%" },
+];
+
+const tripRows = [
+  { trip: "Airport transfer", amount: "$860", status: "On track" },
+  { trip: "Wine tour", amount: "$1,240", status: "High margin" },
+  { trip: "Corporate route", amount: "$690", status: "Needs review" },
+];
+
+export function PublicHomepage() {
+  return (
+    <div className="marketing-page marketing-page-premium">
+      <section className="marketing-section marketing-premium-hero">
+        <div className="marketing-shell marketing-premium-hero-grid">
+          <div className="marketing-premium-copy">
+            <p className="marketing-kicker marketing-kicker-premium">ReceAI</p>
+            <h1>Know exactly how much each trip makes you</h1>
+            <p className="marketing-premium-lead">
+              Track revenue, control costs, and see real profit before money slips away.
+            </p>
+
+            <div className="marketing-premium-actions">
+              <Link
+                className="marketing-button marketing-button-accent marketing-button-hero"
+                href="/receipts"
+              >
+                Start Free — no signup required
+              </Link>
+              <Link
+                className="marketing-button marketing-button-premium-secondary marketing-button-hero"
+                href="#pricing"
+              >
+                View pricing
+              </Link>
+            </div>
+          </div>
+
+          <div className="marketing-premium-hero-visual" aria-hidden="true">
+            <div className="marketing-premium-dashboard">
+              <div className="marketing-premium-window">
+                <span />
+                <span />
+                <span />
+              </div>
+
+              <div className="marketing-premium-dashboard-body">
+                <div className="marketing-premium-dashboard-header">
+                  <div>
+                    <p>Trip profitability</p>
+                    <strong>Today</strong>
+                  </div>
+                  <span className="marketing-premium-pill">Live margin</span>
+                </div>
+
+                <div className="marketing-premium-metrics">
+                  {dashboardMetrics.map((metric) => (
+                    <div className="marketing-premium-metric-card" key={metric.label}>
+                      <span>{metric.label}</span>
+                      <strong>{metric.value}</strong>
+                      <em>{metric.change}</em>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="marketing-premium-trip-panel">
+                  {tripRows.map((row) => (
+                    <div className="marketing-premium-trip-row" key={row.trip}>
+                      <div>
+                        <strong>{row.trip}</strong>
+                        <span>{row.status}</span>
+                      </div>
+                      <p>{row.amount}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="marketing-section marketing-premium-preview-section">
+        <div className="marketing-shell marketing-premium-stack">
+          <div className="marketing-premium-section-copy">
+            <p className="marketing-kicker">Visibility</p>
+            <h2>See revenue, costs, and profit in one view.</h2>
+            <p className="marketing-premium-copy-muted">
+              Clear numbers make faster decisions. Spot thin trips early and keep margins under control.
+            </p>
+          </div>
+
+          <div className="marketing-premium-preview-card">
+            <div className="marketing-premium-preview-top">
+              <div>
+                <p>Operations dashboard</p>
+                <strong>Weekly performance</strong>
+              </div>
+              <span className="marketing-premium-pill marketing-premium-pill-light">
+                Full visibility
+              </span>
+            </div>
+
+            <div className="marketing-premium-preview-grid">
+              {dashboardMetrics.map((metric) => (
+                <div className="marketing-premium-stat" key={metric.label}>
+                  <span>{metric.label}</span>
+                  <strong>{metric.value}</strong>
+                  <p>{metric.change} vs last week</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="marketing-premium-control-row">
+              <div>
+                <span>Best margin</span>
+                <strong>Wine tour</strong>
+              </div>
+              <div>
+                <span>Cost alert</span>
+                <strong>Fuel +8%</strong>
+              </div>
+              <div>
+                <span>Cash flow</span>
+                <strong>Healthy</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="marketing-section marketing-premium-pricing-section" id="pricing">
+        <div className="marketing-shell marketing-premium-stack">
+          <div className="marketing-premium-section-copy">
+            <p className="marketing-kicker">Pricing</p>
+            <h2>Choose the control level that fits your operation.</h2>
+          </div>
+
+          <div className="marketing-premium-pricing-grid">
+            {MARKETING_PLANS.map((plan) => (
+              <article
+                className={`marketing-premium-pricing-card marketing-premium-pricing-card-${plan.plan}`}
+                key={plan.name}
+              >
+                <div className="marketing-premium-pricing-content">
+                  <div className="marketing-premium-pricing-header">
+                    <div className="marketing-premium-pricing-heading">
+                      <p>{plan.name}</p>
+                      <h3>{plan.priceLabel}</h3>
+                    </div>
+                    {plan.badge ? (
+                      <span className="marketing-plan-badge marketing-plan-badge-popular">
+                        {plan.badge}
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <p className="marketing-premium-pricing-description">{plan.description}</p>
+
+                  <ul className="marketing-premium-pricing-features">
+                    {plan.features.map((feature) => (
+                      <li key={feature}>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="marketing-premium-pricing-action">
+                  {plan.plan === "free" ? (
+                    <Link
+                      className="marketing-button marketing-button-premium-neutral marketing-button-full"
+                      href="/receipts"
+                    >
+                      {plan.ctaLabel}
+                    </Link>
+                  ) : (
+                    <PricingCheckoutButton
+                      className={`marketing-button marketing-button-full ${
+                        plan.plan === "pro"
+                          ? "marketing-button-accent"
+                          : "marketing-button-dark"
+                      }`}
+                      label={plan.ctaLabel}
+                      plan={plan.plan}
+                    />
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="marketing-section marketing-premium-final-section">
+        <div className="marketing-shell">
+          <div className="marketing-premium-final-cta">
+            <h2>Stop guessing. Start controlling your revenue.</h2>
+            <Link className="marketing-button marketing-button-accent marketing-button-hero" href="/receipts">
+              Start Free
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -1,43 +1,29 @@
-import { NextResponse } from "next/server";
-import { created, fail, readJsonBody, success } from "@/lib/saas-http";
-import { saasRepository } from "@/lib/saas-service";
-import { RevenueRecordCreateInput } from "@/lib/saas-types";
-
-export const runtime = "nodejs";
-
-export async function GET(request: Request) {
-  try {
-    const url = new URL(request.url);
-    const id = url.searchParams.get("id");
-    const customerId = url.searchParams.get("customerId");
-
-    if (id) {
-      const revenueRecord = await saasRepository.getRevenueRecord(id);
-
-      return success({ revenueRecord });
-    }
-
-    const records = customerId
-      ? await saasRepository.listRevenueRecordsByCustomer(customerId)
-      : await saasRepository.listRevenueRecords();
-
-    return success({ revenueRecords: records });
-  } catch (error) {
-    return fail(error);
-  }
-}
+import { apiError, apiSuccess, parseJsonBody } from "@/lib/api/responses";
+import { getApiAppContext } from "@/lib/api/auth";
+import {
+  createRevenueRecord,
+  toRouteErrorResponse,
+} from "@/modules/invoice-flow/api";
 
 export async function POST(request: Request) {
-  try {
-    const body = (await readJsonBody(request)) as RevenueRecordCreateInput;
-    const revenueRecord = await saasRepository.createRevenueRecord(body);
+  const context = await getApiAppContext();
 
-    return created({ revenueRecord });
-  } catch (error) {
-    return fail(error);
+  if (!context) {
+    return apiError(401, "unauthorized", "Authentication is required.");
   }
-}
 
-export function OPTIONS() {
-  return new NextResponse(null, { status: 204 });
+  try {
+    const payload = await parseJsonBody(request);
+    const revenueRecord = await createRevenueRecord(context, payload);
+
+    return apiSuccess({ revenueRecord }, 201);
+  } catch (error) {
+    const response = toRouteErrorResponse(error);
+    return apiError(
+      response.status,
+      response.code,
+      response.message,
+      response.details,
+    );
+  }
 }

@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ReceAI v2
 
-## Getting Started
+ReceAI v2 is the clean restart of the platform on top of Next.js, Supabase, and Stripe-aligned boundaries. The current repo now contains real workspace-scoped business modules, invoice delivery flows, receipts, bank reconciliation, and reporting, while still keeping billing and other advanced boundaries intentionally limited.
 
-First, run the development server:
+## Stack
+
+- Next.js App Router
+- TypeScript
+- Supabase auth, storage, and Postgres
+- Stripe-aligned billing boundary
+- Platform-controlled invoice email sending
+
+## Available Scripts
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run start
+npm run lint
+npm run typecheck
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` into your local env file and provide real values for:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `NEXT_PUBLIC_APP_URL`
+- `SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `RESEND_API_KEY`
+- `PLATFORM_EMAIL_FROM_EMAIL`
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `STRIPE_PRICE_STARTER_MONTHLY`
+- `STRIPE_PRICE_GROWTH_MONTHLY`
 
-## Learn More
+Workspace reply-to email is configured in the app under Settings, not via env.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment Readiness
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- In-app runtime readiness is available at `/settings/deployment`
+- The release checklist and acceptance checklist live in [`docs/RELEASE_READINESS.md`](/Users/bptravel/.openclaw/workspace/projects/receai-platform/docs/RELEASE_READINESS.md)
+- Missing or placeholder env values now fail with operator-facing runtime messages instead of silent boundary failures
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Current Scope
 
-## Deploy on Vercel
+ReceAI v2 currently includes:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Auth and workspace bootstrap
+- Workspace settings and members
+- Customers
+- Revenue drafts with line items
+- Invoice drafts, finalization, export, delivery, and payment tracking
+- Costs and receipt intake/posting
+- Bank imports and manual reconciliation
+- Profit summary reporting
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deliberate Non-Goals Right Now
+
+- Custom SMTP or customer-owned provider binding
+- Direct bank API integrations
+- Automated OCR/provider switching
+- Advanced accounting/export
+- Legacy v1 business logic carry-over

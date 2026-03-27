@@ -1,47 +1,51 @@
-import { NextResponse } from "next/server";
-import { created, fail, readJsonBody, success } from "@/lib/saas-http";
-import { saasRepository } from "@/lib/saas-service";
-import { GenerateInvoiceInput } from "@/lib/saas-types";
+import { apiError, apiSuccess, parseJsonBody } from "@/lib/api/responses";
+import { getApiAppContext } from "@/lib/api/auth";
+import {
+  createInvoiceFromRevenueRecord,
+  listWorkspaceInvoices,
+  toRouteErrorResponse,
+} from "@/modules/invoice-flow/api";
 
-export const runtime = "nodejs";
+export async function GET() {
+  const context = await getApiAppContext();
 
-export async function GET(request: Request) {
+  if (!context) {
+    return apiError(401, "unauthorized", "Authentication is required.");
+  }
+
   try {
-    const url = new URL(request.url);
-    const id = url.searchParams.get("id");
-    const revenueRecordId = url.searchParams.get("revenueRecordId");
-
-    if (id) {
-      const invoice = await saasRepository.getInvoice(id);
-
-      return success({ invoice });
-    }
-
-    if (revenueRecordId) {
-      const invoice = await saasRepository.getInvoiceByRevenueRecordId(revenueRecordId);
-
-      return success({ invoice });
-    }
-
-    const invoices = await saasRepository.listInvoices();
-
-    return success({ invoices });
+    const data = await listWorkspaceInvoices(context);
+    return apiSuccess(data);
   } catch (error) {
-    return fail(error);
+    const response = toRouteErrorResponse(error);
+    return apiError(
+      response.status,
+      response.code,
+      response.message,
+      response.details,
+    );
   }
 }
 
 export async function POST(request: Request) {
-  try {
-    const body = (await readJsonBody(request)) as GenerateInvoiceInput;
-    const invoice = await saasRepository.createInvoiceFromRevenue(body);
+  const context = await getApiAppContext();
 
-    return created({ invoice });
-  } catch (error) {
-    return fail(error);
+  if (!context) {
+    return apiError(401, "unauthorized", "Authentication is required.");
   }
-}
 
-export function OPTIONS() {
-  return new NextResponse(null, { status: 204 });
+  try {
+    const payload = await parseJsonBody(request);
+    const data = await createInvoiceFromRevenueRecord(context, payload);
+
+    return apiSuccess(data, 201);
+  } catch (error) {
+    const response = toRouteErrorResponse(error);
+    return apiError(
+      response.status,
+      response.code,
+      response.message,
+      response.details,
+    );
+  }
 }

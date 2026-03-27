@@ -1,7 +1,16 @@
 node_modules
 .next
+.env
 .env.local
+.env.*
+!.env.example
+.env.*.local
 .openclaw
 .venv
 venv
 *.log
+*.tsbuildinfo
+dist
+coverage
+.DS_Store
+supabase/.temp

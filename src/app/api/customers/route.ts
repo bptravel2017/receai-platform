@@ -1,33 +1,29 @@
-import { NextResponse } from "next/server";
-import { created, fail, readJsonBody, success } from "@/lib/saas-http";
-import { saasRepository } from "@/lib/saas-service";
-import { CustomerCreateInput } from "@/lib/saas-types";
-
-export const runtime = "nodejs";
-
-export async function GET() {
-  try {
-    await saasRepository.validateConnection();
-    const customers = await saasRepository.listCustomers();
-
-    return success({ customers });
-  } catch (error) {
-    return fail(error);
-  }
-}
+import { apiError, apiSuccess, parseJsonBody } from "@/lib/api/responses";
+import { getApiAppContext } from "@/lib/api/auth";
+import {
+  createCustomerRecord,
+  toRouteErrorResponse,
+} from "@/modules/invoice-flow/api";
 
 export async function POST(request: Request) {
-  try {
-    await saasRepository.validateConnection();
-    const body = (await readJsonBody(request)) as CustomerCreateInput;
-    const customer = await saasRepository.createCustomer(body);
+  const context = await getApiAppContext();
 
-    return created({ customer });
-  } catch (error) {
-    return fail(error);
+  if (!context) {
+    return apiError(401, "unauthorized", "Authentication is required.");
   }
-}
 
-export function OPTIONS() {
-  return new NextResponse(null, { status: 204 });
+  try {
+    const payload = await parseJsonBody(request);
+    const customer = await createCustomerRecord(context, payload);
+
+    return apiSuccess({ customer }, 201);
+  } catch (error) {
+    const response = toRouteErrorResponse(error);
+    return apiError(
+      response.status,
+      response.code,
+      response.message,
+      response.details,
+    );
+  }
 }
