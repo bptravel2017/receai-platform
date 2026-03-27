@@ -12,7 +12,7 @@ export function PublicHomepage() {
               <span className="block text-orange-600 mt-2">for Limo Drivers</span>
             </h1>
             <p className="mt-6 max-w-lg mx-auto text-xl text-gray-600">
-              Create professional receipts in seconds. No signup required. Track your earnings effortlessly.
+              AI-powered tools for transportation businesses. Receipts, accounting, and automation built for drivers and tour operators.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -22,10 +22,12 @@ export function PublicHomepage() {
                 Start Creating Receipts
               </Link>
               <Link
-                href="#features"
-                className="px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
+                href="https://ledger.receai.com"
+                className="px-8 py-3 border border-orange-600 text-base font-medium rounded-md text-orange-600 bg-white hover:bg-orange-50 md:py-4 md:text-lg md:px-10"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                Learn More
+                Open TourLedger
               </Link>
             </div>
             <div className="mt-8 flex justify-center gap-8 text-sm text-gray-600">
@@ -74,12 +76,12 @@ export function PublicHomepage() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <span className="text-orange-600 text-xl">💰</span>
+                  <span className="text-orange-600 text-xl">📊</span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">Earnings Tracking</h3>
+                <h3 className="text-lg font-semibold text-gray-900">TourLedger ERP</h3>
               </div>
               <p className="text-gray-600">
-                See your daily, weekly, and monthly earnings. Know exactly how much you&apos;re making.
+                Complete accounting solution for transportation businesses. Invoicing, expenses, and financial reporting.
               </p>
             </div>
 
